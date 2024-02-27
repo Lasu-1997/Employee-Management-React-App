@@ -1,22 +1,55 @@
-import React, { Component } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import AppRoutes from './AppRoutes';
-import { Layout } from './components/Layout';
-import './custom.css';
+import { useEffect, useState } from "react";
 
-export default class App extends Component {
-  static displayName = App.name;
+const App = () => {
 
-  render() {
+    //1 create useState
+    const [employees, setEmployees] = useState([])
+
+    //2 call api
+    useEffect(() => {
+        fetch("api/employee/GetEmployees")
+            .then(response => { return response.json() })
+            .then(responseJson => {
+
+                setEmployees(responseJson)
+            })
+    }, [])
+
+    //3.- create div and table
     return (
-      <Layout>
-        <Routes>
-          {AppRoutes.map((route, index) => {
-            const { element, ...rest } = route;
-            return <Route key={index} {...rest} element={element} />;
-          })}
-        </Routes>
-      </Layout>
-    );
-  }
+        <div className="container">
+            <h1>Employees</h1>
+            <div className="row">
+                <div className="col-sm-12">
+                    <table className="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>IdEmployee</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Address</th>
+                                <th>Phone</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                employees.map((item) => (
+                                    <tr>
+                                        <td>{item.id}</td>
+                                        <td>{item.name}</td>
+                                        <td>{item.email}</td>
+                                        <td>{item.address}</td>
+                                        <td>{item.PhoneNumber}</td>
+                                    </tr>
+
+                                ))
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    )
 }
+
+export default App;

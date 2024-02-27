@@ -1,8 +1,18 @@
+using Employee_Management_React_App.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+
+//Add dbcontext
+builder.Services.AddDbContext<EmployeeManagementDbContext>(options => 
+{
+    string? coonectionString = builder.Configuration.GetConnectionString("EmployeeManagementDbContext");
+    options.UseSqlServer(coonectionString);
+});
 
 var app = builder.Build();
 
